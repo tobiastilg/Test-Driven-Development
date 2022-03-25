@@ -129,3 +129,5 @@ Kent Beck ist der Erfinder des Frameworks und amerikanischer Softwareentwickler.
 Mockito ist eine Java-Bibliothek, die mithilfe von Mocking Dummy-Objekte für Unit-Tests bereitstellen kann. Der Grundgedanke, dass nur ein Programmteil / eine Unit ohne Abhängigkeiten getestet wird, wird so unterstützt.
 
 (https://de.wikipedia.org/wiki/Mockito und https://site.mockito.org/)
+
+Sehr hilfreiches Video: https://www.youtube.com/watch?v=p7_cTAF39A8&t=88s&ab_channel=CodeWithArho

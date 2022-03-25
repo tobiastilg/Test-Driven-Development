@@ -14,12 +14,16 @@ import java.util.Map;
 @DisplayName("Kinosaal Tests")
 public class TestKinoSaal {
 
+    //Datenfelder deklarieren
     private String name;
     private Map<Character, Integer> reihen;
     private KinoSaal kinoSaal1;
 
+    /**
+     * Initialisieren der Datenfelder - "Given" auslagern
+     */
     @BeforeEach
-    public void setUpAttributes() {
+    public void setUp() {
         //Given
         name = "Saal 1";
         reihen = new HashMap<>();
@@ -34,7 +38,7 @@ public class TestKinoSaal {
 
     @Test
     @DisplayName("Anlegen eines Kinosaals mit korrekten Parametern")
-    public void saalAnlegen_korrekteInputParameter_SaalAngelegt() {
+    public void saalAnlegen_korrekteInputParameter_saalAngelegt() {
         //When
         kinoSaal1 = new KinoSaal(name, reihen);
 
@@ -49,7 +53,7 @@ public class TestKinoSaal {
 
     @Test
     @DisplayName("Anlegen eines Kinosaals mit falschen Parametern")
-    public void saalAnlegen_falscheInputParameter_SaalNichtAngelegt() {
+    public void saalAnlegen_falscheInputParameter_saalNichtAngelegt() {
         //When
         kinoSaal1 = new KinoSaal(name, reihen);
 
@@ -85,7 +89,7 @@ public class TestKinoSaal {
 
     @Test
     @DisplayName("Platz prüfen erfolgreich")
-    public void pruefePlatz_korrekteInputParameter_PlatzErfolgreichGeprueft() {
+    public void pruefePlatz_korrekteInputParameter_platzErfolgreichGeprueft() {
         //When
         boolean platzKorrekt1 = kinoSaal1.pruefePlatz('A', 15);
         boolean platzKorrekt2 = kinoSaal1.pruefePlatz('B', 10);
@@ -99,7 +103,7 @@ public class TestKinoSaal {
 
     @Test
     @DisplayName("Platz prüfen fehlerhaft")
-    public void pruefePlatz_falscheInputParameter_PlatzFehlerhaftGeprueft() {
+    public void pruefePlatz_falscheInputParameter_platzFehlerhaftGeprueft() {
         //When
         boolean platzKorrekt1 = kinoSaal1.pruefePlatz('A', 20);
         boolean platzKorrekt2 = kinoSaal1.pruefePlatz('B', -5); //--> überarbeiten
