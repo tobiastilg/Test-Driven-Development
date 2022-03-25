@@ -31,6 +31,5 @@ public class App
         kinoVerwaltung.einplanenVorstellung(vorstellung1);
 
         Ticket ticket = vorstellung1.kaufeTicket('C', 12, 12);
-
     }
 }

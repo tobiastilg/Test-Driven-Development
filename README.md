@@ -1,6 +1,6 @@
 # Test-Driven-Development
 
-Das Kernkonzept des Test-Driven-Developments ist das Erstellen von Softwaretests **vor** dem eigentlichen Erstellen der zu testenden Komponente. Ich definiere also durch den Test wie meine öffentliche Schnitstelle aussieht. Grundsätzlich führt TDD zu gutem Klassenentwurf. Vorraussetzung ist natürlich zu wissen was man wirklich benötigt - sollten sich neue Businessregeln mit der Zeit ergeben, bereits existierende ändern oder vorhandene nicht mehr benötigt werden, so führt TDD zu unnötigem Mehraufwand. Es wirkt jedoch der häufig mangelnden Abdeckung und Qualität an Tests entgegen.
+Das Kernkonzept des Test-Driven-Developments ist das Erstellen von Softwaretests **vor** dem eigentlichen Erstellen der zu testenden Komponente. Ich definiere also durch den Test wie meine öffentliche Schnitstelle aussieht. Grundsätzlich führt TDD zu gutem Klassenentwurf bzw. zu gut strukturierten Code. Vorraussetzung ist natürlich zu wissen was man wirklich benötigt - sollten sich neue Businessregeln mit der Zeit ergeben, bereits existierende ändern oder vorhandene nicht mehr benötigt werden, so führt TDD zu unnötigem Mehraufwand. Es wirkt jedoch der häufig mangelnden Abdeckung und Qualität an Tests entgegen.
 
 ## Grundprinzipien
 
@@ -110,7 +110,7 @@ Mithilfe von JUnit @-Annotationen können Methoden für den Testvorgang konfigur
 
 - `@Test` - kennzeichnet einen Test (bzw. eine Testmethode)
 - `@BeforeAll` - einmal vor einem Testlauf ausgeführt
-- `@BeforeEach` - vor jedem einzelnen Test ausgeführt
+- `@BeforeEach` - vor jedem einzelnen Test ausgeführt (sollten nur Given enthalten)
 - `@AfterAll` - gleiches Prinzip nur dannach
 - `@AfterEach` - gleiches Prinzip nur dannach
 

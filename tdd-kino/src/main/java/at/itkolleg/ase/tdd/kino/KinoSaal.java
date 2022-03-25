@@ -20,7 +20,7 @@ public class KinoSaal {
     boolean pruefePlatz(char reihe, int platz) {
         Integer platze = reihen.get(reihe);
         System.out.println(platze);
-        if (platze == null || platz > platze || platz == 0) {
+        if (platze == null || platz > platze || platz <= 0) {
             return false;
         }
         return true;
