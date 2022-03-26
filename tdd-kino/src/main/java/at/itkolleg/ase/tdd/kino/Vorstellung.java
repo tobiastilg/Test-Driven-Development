@@ -42,6 +42,10 @@ public class Vorstellung {
         return datum;
     }
 
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
     Ticket kaufeTicket(char reihe, int platz, float geld) {
         if (geld < preis) {
             throw new IllegalArgumentException("Nicht ausreichend Geld.");

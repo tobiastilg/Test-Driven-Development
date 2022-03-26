@@ -1,14 +1,13 @@
 package at.itkolleg.ase.tdd.kino;
 
-import org.junit.jupiter.api.*;
-import org.mockito.Mock;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Testklasse für die Klasse Vorstellung
@@ -36,8 +35,10 @@ public class TestVorstellung {
         datum = LocalDate.of(2022, 3, 26);
         film = "Batman";
         preis = 10.5F;
+
+        /* Nicht benötigt
         tickets = new LinkedList<>();
-        tickets.add(Mockito.mock(Ticket.class));
+        tickets.add(Mockito.mock(Ticket.class));*/
 
         vorstellung = new Vorstellung(saal, zeitfenster, datum, film, preis);
     }
@@ -47,22 +48,34 @@ public class TestVorstellung {
     void vorstellungAnlegen_korrekteInputParameter_vorstellungAngelegt() {
         //When
         vorstellung = new Vorstellung(saal, zeitfenster, datum, film, preis);
-
-        Mockito.when(saal.getName()).thenReturn("Saal 4"); //Bedingung bei einem Mocks-Aufruf festlegen
-        Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
-
-        Mockito.when(tickets.get(0).getPlatz()).thenReturn(6); //Mockito.any(Integer.class)
-        Mockito.when(tickets.get(0).getReihe()).thenReturn('E');
+        KinoSaal tempSaal = saal;
 
         //Then
-        Assertions.assertEquals(saal.getName(), "Saal 4");
-        Assertions.assertTrue(saal.pruefePlatz('F', 20));
+        Assertions.assertEquals(tempSaal, saal);
         Assertions.assertEquals(zeitfenster, Zeitfenster.ABEND);
         Assertions.assertEquals(datum, LocalDate.of(2022, 3, 26));
         Assertions.assertEquals(film, "Batman");
         Assertions.assertEquals(preis, 10.5);
+
+
+        /* Eigentlich nicht ganz richtig, da es sich hier um Operationen der Klasse Kinosaal handelt
+        //When
+        Mockito.when(saal.getName()).thenReturn("Saal 4"); //Bedingung bei einem Mocks-Aufruf festlegen
+        Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
+
+        //Then
+        Assertions.assertEquals(saal.getName(), "Saal 4");
+        Assertions.assertTrue(saal.pruefePlatz('F', 20));*/
+
+
+        /* Nicht benötigt, da es nichts mit dem Erstellen vom Objekt zu tun hat
+        //When
+        Mockito.when(tickets.get(0).getPlatz()).thenReturn(6); //Mockito.any(Integer.class)
+        Mockito.when(tickets.get(0).getReihe()).thenReturn('E');
+
+        //Then
         Assertions.assertEquals(tickets.get(0).getPlatz(), 6);
-        Assertions.assertEquals(tickets.get(0).getReihe(), 'E');
+        Assertions.assertEquals(tickets.get(0).getReihe(), 'E');*/
     }
 
     @Test
@@ -111,8 +124,9 @@ public class TestVorstellung {
         //When
         Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
 
-        //Then
+        //When & Then
         Assertions.assertInstanceOf(Ticket.class, vorstellung.kaufeTicket('E', 12, 15));
+        Assertions.assertEquals(vorstellung.getTickets().size(), 1);
     }
 
     @Test
@@ -122,7 +136,7 @@ public class TestVorstellung {
         Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
 
         //Then
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> vorstellung.kaufeTicket('E', 12, 5));
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> vorstellung.kaufeTicket('E', 12, 5), "Nicht ausreichend Geld.");
     }
 
     @Test
