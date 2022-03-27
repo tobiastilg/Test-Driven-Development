@@ -19,6 +19,7 @@ public class KinoVerwaltung {
     }
 
     public Ticket kaufeTicket(Vorstellung vorstellung, char reihe, int platz, float geld) {
+        //Hier sollte man eigentlich noch prüfen, ob die Vorstellung überhaupt eingeplant ist (Businesslogik?)
         return vorstellung.kaufeTicket(reihe, platz, geld);
     }
 

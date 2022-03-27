@@ -31,6 +31,9 @@ public class TestKinoverwaltung {
         vorstellungen = new LinkedList<>();
     }
 
+    /**
+     * Aufgabe 7 - Übung 1
+     */
     @Test
     @DisplayName("Erfolgreiches Einplanen einer Vorstellung")
     void vorstellungEinplanen_korrekteInputParameter_vorstellungHinzugefuegt() {
@@ -38,9 +41,40 @@ public class TestKinoverwaltung {
         kinoVerwaltung.einplanenVorstellung(vorstellung);
 
         //Then
-        Assertions.assertEquals(kinoVerwaltung.getVorstellungen().size(), 1);
+        Assertions.assertEquals(kinoVerwaltung.getVorstellungen().size(), 1, "Falsche Anzahl an Vorstellungen eingeplant.");
+        Assertions.assertEquals(kinoVerwaltung.getVorstellungen().get(0), vorstellung, "Vorstellung konnte nicht eingeplant werden.");
     }
 
+    /**
+     * Aufgabe 7 - Übung 2
+     */
+    @Test
+    @DisplayName("Erfolgreiches Einplanen mehrerer Vorstellungen")
+    void vorstellungenEinplanen_korrekteInputParameter_vorstellungenHinzugefuegt() {
+        //Given - manuelles initialisieren lokaler Mocks
+        Vorstellung vorstellung2 = Mockito.mock(Vorstellung.class);
+        Vorstellung vorstellung3 = Mockito.mock(Vorstellung.class);
+
+        //When
+        kinoVerwaltung.einplanenVorstellung(vorstellung);
+        kinoVerwaltung.einplanenVorstellung(vorstellung2);
+        kinoVerwaltung.einplanenVorstellung(vorstellung3);
+
+        //Then
+        Assertions.assertAll("Vorstellungen einplanen",
+                ()-> Assertions.assertEquals(kinoVerwaltung.getVorstellungen().size(), 3, "Falsche Anzahl an Vorstellungen eingeplant."),
+                ()-> Assertions.assertEquals(kinoVerwaltung.getVorstellungen().get(0), vorstellung, "Erste Vorstellung konnte nicht eingeplant werden."),
+                ()-> Assertions.assertEquals(kinoVerwaltung.getVorstellungen().get(1), vorstellung2, "Zweite Vorstellung konnte nicht eingeplant werden."),
+                ()-> Assertions.assertEquals(kinoVerwaltung.getVorstellungen().get(2), vorstellung3, "Dritte Vorstellung konnte nicht eingeplant werden.")
+        );
+
+        Assertions.assertEquals(kinoVerwaltung.getVorstellungen().size(), 3, "Falsche Anzahl an Vorstellungen eingeplant.");
+        Assertions.assertEquals(kinoVerwaltung.getVorstellungen().get(0), vorstellung, "Vorstellung nicht eingeplant.");
+    }
+
+    /**
+     * Aufgabe 7 - Übung 3
+     */
     @Test
     @DisplayName("Vorstellung bereits eingeplant")
     void vorstellungEinplanen_fehlerhafteInputParameter_exceptionVorstellungBereitsEingeplant() {
@@ -48,7 +82,8 @@ public class TestKinoverwaltung {
         kinoVerwaltung.einplanenVorstellung(vorstellung);
 
         //Then
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> kinoVerwaltung.einplanenVorstellung(vorstellung), "Die Vorstellung ist bereits eingeplant");
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, ()-> kinoVerwaltung.einplanenVorstellung(vorstellung), "Die Vorstellung ist noch nicht eingeplant");
+        Assertions.assertEquals(exception.getMessage(), "Die Vorstellung ist bereits eingeplant");
     }
 
     /**
@@ -67,13 +102,15 @@ public class TestKinoverwaltung {
 
     /**
      * Eigentlich nicht nötig bzw. richtig, da die Methode keine wirkliche Logik enthält,
-     * und schon auf Logik innerhalb der Vorstellungsklasse prüft (return)
+     * und schon auf Logik innerhalb der Vorstellungsklasse geprüft wird (return)
      */
     @Test
     @DisplayName("Ticket kaufen erfolgreich")
     void kaufeTicket_korrekteInputParameter_ticket() {
-        //When
+        //Given
         Ticket ticket = Mockito.mock(Ticket.class);
+
+        //When
         Mockito.when(vorstellung.kaufeTicket(
                 Mockito.any(Character.class),
                 Mockito.any(Integer.class),
@@ -85,13 +122,15 @@ public class TestKinoverwaltung {
 
     /**
      * Eigentlich nicht nötig bzw. richtig, da die Methode keine wirkliche Logik enthält,
-     * und schon auf Logik innerhalb der Vorstellungsklasse prüft (Exception)
+     * und schon auf Logik innerhalb der Vorstellungsklasse geprüft wird (Exception)
      */
     @Test
     @DisplayName("Ticket kaufen fehlerhaft")
     void kaufeTicket_fehlerhafteInputParameter_exception() {
-        //When
+        //Given
         Ticket ticket = Mockito.mock(Ticket.class);
+
+        //When
         Mockito.when(vorstellung.kaufeTicket(
                 Mockito.any(Character.class),
                 Mockito.any(Integer.class),

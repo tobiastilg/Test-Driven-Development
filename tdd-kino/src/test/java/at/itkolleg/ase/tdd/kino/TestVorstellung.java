@@ -1,13 +1,13 @@
 package at.itkolleg.ase.tdd.kino;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Random;
+import java.util.stream.Stream;
 
 /**
  * Testklasse für die Klasse Vorstellung
@@ -20,7 +20,7 @@ public class TestVorstellung {
     private LocalDate datum;
     private String film;
     private float preis;
-    private List<Ticket> tickets;
+    //private List<Ticket> tickets;
     private Vorstellung vorstellung;
 
     /**
@@ -36,7 +36,7 @@ public class TestVorstellung {
         film = "Batman";
         preis = 10.5F;
 
-        /* Nicht benötigt
+        /* Nicht benötigt - wird nicht über Konstruktor mitgegeben und nur intern benötigt
         tickets = new LinkedList<>();
         tickets.add(Mockito.mock(Ticket.class));*/
 
@@ -136,7 +136,7 @@ public class TestVorstellung {
         Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
 
         //Then
-        Assertions.assertThrows(IllegalArgumentException.class, ()-> vorstellung.kaufeTicket('E', 12, 5), "Nicht ausreichend Geld.");
+        Assertions.assertThrows(IllegalArgumentException.class, ()-> vorstellung.kaufeTicket('E', 12, 5));
     }
 
     @Test
@@ -158,5 +158,75 @@ public class TestVorstellung {
 
         //Then
         Assertions.assertThrows(IllegalStateException.class, ()-> vorstellung.kaufeTicket('E', 12, 15));
+    }
+
+    /**
+     * Aufgabe 7 - Übung 4
+     */
+    @ParameterizedTest(name = "reihe: {0}, platz: {1}, geld: {2}")
+    @CsvSource({"A, 10, 12", "B, 5, 10.5", "C, 15, 15,", "D, 8, 16"}) //Given
+    @DisplayName("Mehrere Tickets kaufen erfolgreich")
+    void kaufeTickets_korrekteInputParameter_ticket(char reihe, int platz, float geld) {
+        /* Wenn man auf fehlerhafte Werte prüfen möchte, dann funktioniert das so nicht.
+        *  Das Geld lässt sich zwar ohne Probleme überprüfen und mittels der Mockito.when() Methode auch die
+        *  pruefePlatz() Abfrage des Saals, ob das Ticket aber bereits belegt ist kann nicht korrekt getestet werden,
+        *  da die Ticketliste des Saals nicht erhalten bleibt und somit jedes Mal neu erzeugt wird.
+        *  Hierbei spielt es keine Rolle, ob es sich um einen gemockten Saal oder um ein richtig erzeugtes Objekt handelt.
+        */
+
+        //When
+        Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
+        Ticket ticket = vorstellung.kaufeTicket(reihe, platz, geld);
+
+        //Then
+        Assertions.assertInstanceOf(Ticket.class, ticket);
+        Assertions.assertEquals(ticket.getReihe(), reihe);
+        Assertions.assertEquals(ticket.getPlatz(), platz);
+    }
+
+    /**
+     * Aufgabe 7 - Übung 5
+     */
+    @TestFactory
+    @DisplayName("Dynamisch - Mehrere Tickets kaufen erfolgreich")
+    Stream<DynamicTest> kaufeTickets_korrekteInputParameter_ticket() {
+        //Given - Lifecycle-Methode setUp() funktioniert bei einer TestFactory nicht
+        saal = Mockito.mock(KinoSaal.class); //manuelle Initialisierung
+        zeitfenster = Zeitfenster.ABEND;
+        datum = LocalDate.of(2022, 3, 26);
+        film = "Batman";
+        preis = 10.5F;
+        vorstellung = new Vorstellung(saal, zeitfenster, datum, film, preis);
+
+        //When & Then
+        return new Random(999).ints(0, 1000).limit(100).mapToObj(
+            i -> {
+                char reihe = (char) ((i % 50) + 50);
+                int platz = i % 50;
+                int geld = i % 50;
+
+                if (i % 5 == 0) {
+                    Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(false);
+                } else {
+                    Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(true);
+                }
+
+                return DynamicTest.dynamicTest("Ticket kaufen", () -> {
+                    try {
+                        Assertions.assertInstanceOf(Ticket.class, vorstellung.kaufeTicket(reihe, platz, geld), "Ticketkauf nicht erfolgreich");
+                    } catch (IllegalArgumentException illegalArgumentException) {
+                        if (illegalArgumentException.getMessage().equals("Nicht ausreichend Geld.")) {
+                            Assertions.assertTrue(true, "Nicht ausreichend Geld.");
+                            //Message tritt in diesem Fall (auch bei den anderen Exceptions) bei false ein - also sollte sie eigentlich "Ausreichend Geld" heißen (oder?)
+                        } else if ((illegalArgumentException.getMessage().contains("existiert nicht")))  {
+                            Assertions.assertTrue(true, "Der Platz existiert nicht.");
+                        }
+                    } catch (IllegalStateException illegalStateException) {
+                        if (illegalStateException.getMessage().contains("bereits belegt"))
+                            Assertions.assertTrue(true, "Der Platz ist bereits belegt.");
+                    }
+                });
+            }
+        );
     }
 }

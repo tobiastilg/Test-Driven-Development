@@ -42,8 +42,6 @@ Ein Test gibt selten etwas zurück oder hat Parameter.
 
 Man kann auch eine Basisstrktur für Tests festlegen.
 
-TestFactory
-
 ## Testarten
 
 Man unterscheidet die Arten zu Testen nach den Komponenten/Programmteilen die getestet werden.
@@ -113,12 +111,25 @@ Mithilfe von JUnit @-Annotationen können Methoden für den Testvorgang konfigur
 - `@BeforeEach` - vor jedem einzelnen Test ausgeführt (sollten nur Given enthalten)
 - `@AfterAll` - gleiches Prinzip nur dannach
 - `@AfterEach` - gleiches Prinzip nur dannach
+- `@Disabled` - deaktiviert einen Test (für lange automatische Testausführungen wichtig)
 
 (https://de.wikipedia.org/wiki/JUnit und https://junit.org/junit5/)
 
+Infos zu JUnit 5: https://training.cherriz.de/cherriz-training/1.0.0/testen/junit5.html
+
+## TestFactory
+
+Mit TestFactorys können dynamische Tests geschrieben werden. Die `@TestFactory` Annotaion definiert einen dynamischen Test. 
+Wichtig zu wissen ist, dass die JUnit Lifecycle-Methoden (`@BeforeEach` und `@AfterEach`) bei einer TestFactory nicht funktionieren.
+
+## Parametrisierte Tests
+
+Weiters gibt es noch parametrisierte Tests, die Testdaten aus Parametern übernehmen können. 
+Ein Test mit der `@ParameterizedTest` Annotation kann Daten, zum Beispiel als CSV durch die `@CsvSource` Annotation, entgegennehmen und verwenden.
+
 ## Maven
 
-JUnit kann mittels Dependency in der `pom.xml`, einem Maven Projekt hinzugefügt werden. Durch den *Maven Lifecycle **test*** können die automatisch ausgeführt werden (kann zB die CI-Pipeline auf GitHub auch).
+JUnit kann mittels Dependency in der `pom.xml`, einem Maven Projekt hinzugefügt werden. Durch den *Maven Lifecycle **test*** können sie automatisch ausgeführt werden (kann zB die CI-Pipeline auf GitHub auch).
 
 ## Kent Beck
 
@@ -130,4 +141,5 @@ Mockito ist eine Java-Bibliothek, die mithilfe von Mocking Dummy-Objekte für Un
 
 (https://de.wikipedia.org/wiki/Mockito und https://site.mockito.org/)
 
-Sehr hilfreiches Video: https://www.youtube.com/watch?v=p7_cTAF39A8&t=88s&ab_channel=CodeWithArho
+Hilfreiches Video: https://www.youtube.com/watch?v=p7_cTAF39A8&t=88s&ab_channel=CodeWithArho
+Beispiel: https://stackoverflow.com/questions/16467685/difference-between-mock-and-injectmocks
