@@ -48,10 +48,9 @@ public class TestVorstellung {
     void vorstellungAnlegen_korrekteInputParameter_vorstellungAngelegt() {
         //When
         vorstellung = new Vorstellung(saal, zeitfenster, datum, film, preis);
-        KinoSaal tempSaal = saal;
 
         //Then
-        Assertions.assertEquals(tempSaal, saal);
+        Assertions.assertEquals(saal, vorstellung.getSaal()); //equals Methode mocken?
         Assertions.assertEquals(zeitfenster, Zeitfenster.ABEND);
         Assertions.assertEquals(datum, LocalDate.of(2022, 3, 26));
         Assertions.assertEquals(film, "Batman");
@@ -201,9 +200,10 @@ public class TestVorstellung {
         //When & Then
         return new Random(999).ints(0, 1000).limit(100).mapToObj(
             i -> {
-                char reihe = (char) ((i % 50) + 50);
-                int platz = i % 50;
-                int geld = i % 50;
+                Random random = new Random();
+                char reihe = (char) (random.nextInt(12)+65);
+                int platz = random.nextInt(15);
+                int geld = random.nextInt(2)+10;
 
                 if (i % 5 == 0) {
                     Mockito.when(saal.pruefePlatz(Mockito.any(Character.class), Mockito.any(Integer.class))).thenReturn(false);
